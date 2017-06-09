@@ -10,9 +10,7 @@ from pathlib import Path
 import pickle
 
 import matplotlib.image as mpimg
-import matplotlib.pyplot as plt
 import numpy as np
-import scipy.io as sio
 
 def singleTunnel(x):
     if x.ndim == 3:
@@ -99,4 +97,4 @@ for f in p.iterdir():
 d = {'data':X, 'images':I, 'target':Y}
 
 with open('../data/digits', mode='wb') as fout:
-    pickle.dump(d,fout)
+    pickle.dump(d, fout)
