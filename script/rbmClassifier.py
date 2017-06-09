@@ -17,7 +17,6 @@ with open('../data/digits', mode='rb') as fin:
 
 X_train = digits['data']
 Y_train = digits['target']
-
 X_train = (X_train - np.min(X_train, 0)) / (np.max(X_train, 0) + 0.0001)
 
 rbm = BernoulliRBM(random_state=0, verbose=True)
