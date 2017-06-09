@@ -8,25 +8,28 @@ Image Reader
 import math
 from pathlib import Path
 import pickle
+from PIL import Image
 
-import matplotlib.image as mpimg
 import numpy as np
 
 def singleTunnel(x):
-    if x.ndim == 3:
-        s = x.shape[2]
-        x = x.sum(2) / s
-    return x
+    if x.ndim == 2:
+        return x
+    else:
+        return x.mean(2)
 
 def compressImg(x):
-    [r, c] = x.shape
+    [r, c] = [32, 32]
 
-    comp = np.empty([math.floor(r/2), math.floor(c/2)])
-    for i in range(0, comp.shape[0]):
-        for j in range(0, comp.shape[1]):
-            comp[i, j] = round((x[i, j] + x[i, j+1] + x[i+1, j] + x[i+1, j+1]) / 4);
-
-    return comp.flatten()
+    # comp = np.empty([math.floor(r/2), math.floor(c/2)])
+    # for i in range(0, comp.shape[0]):
+    #     for j in range(0, comp.shape[1]):
+    #         comp[i, j] = (x[2*i, 2*j] + x[2*i, 2*j+1] + x[2*i+1, 2*j] \
+    #                     + x[2*i+1, 2*j+1]) / 4;
+    #
+    # return comp.flatten()
+    x = x[0:31,0:31]
+    return x.flatten()
 
 path = '../Nosie/'
 trainPath = path + 'TRAIN/'
@@ -42,9 +45,8 @@ p = Path(trainDigitPath)
 for f in p.iterdir():
     if f.suffix in ['.png', '.jpg']:
         print(f.name)
-        with f.open(mode='rb') as fin:
-            x = singleTunnel(mpimg.imread(fin))
-        y = compressImg(x)
+        x = np.array(Image.open(f))
+        y = compressImg(singleTunnel(x))
         I.append(x)
         X.append(y)
         Y.append(int(f.name[0]))
@@ -55,9 +57,8 @@ p = Path(trainDigitPath)
 for f in p.iterdir():
     if f.suffix in ['.png', '.jpg']:
         print(f.name)
-        with f.open(mode='rb') as fin:
-            x = singleTunnel(mpimg.imread(fin))
-        y = compressImg(x)
+        x = np.array(Image.open(f))
+        y = compressImg(singleTunnel(x))
         I.append(x)
         X.append(y)
         if f.name[1] == '_':
@@ -71,9 +72,8 @@ p = Path(trainDigitPath)
 for f in p.iterdir():
     if f.suffix in ['.png', '.jpg']:
         print(f.name)
-        with f.open(mode='rb') as fin:
-            x = singleTunnel(mpimg.imread(fin))
-        y = compressImg(x)
+        x = np.array(Image.open(f))
+        y = compressImg(singleTunnel(x))
         I.append(x)
         X.append(y)
         if f.name[1] == '-':
@@ -87,9 +87,8 @@ p = Path(trainDigitPath)
 for f in p.iterdir():
     if f.suffix in ['.png', '.jpg']:
         print(f.name)
-        with f.open(mode='rb') as fin:
-            x = singleTunnel(mpimg.imread(fin))
-        y = compressImg(x)
+        x = np.array(Image.open(f))
+        y = compressImg(singleTunnel(x))
         I.append(x)
         X.append(y)
         Y.append(int(f.name[2]))
